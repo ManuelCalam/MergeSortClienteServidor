@@ -267,7 +267,7 @@ public class mainWindow extends JFrame{
     }
     
     public void actualizarTiempo(double tiempo, String metodo) {
-        // Este método actualizará los campos de texto con el tiempo recibido
+        
         SwingUtilities.invokeLater(() -> {
             switch (metodo) {
                 case "Secuencial":

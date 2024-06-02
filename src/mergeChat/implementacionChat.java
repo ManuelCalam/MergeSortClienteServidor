@@ -3,12 +3,21 @@ package mergeChat;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import mergesort.mainWindow;
 
 public class implementacionChat extends UnicastRemoteObject implements chatServidor {
     public ArrayList<chatCliente> clientes;
-    
-    public implementacionChat() throws java.rmi.RemoteException {
-        //super();
+    private mainWindow servidorWindow; 
+
+    public implementacionChat() throws RemoteException {
+        try {
+            servidorWindow = new mainWindow(this);
+            servidorWindow.drawWindow(); 
+        } catch (Exception e) {
+            System.out.println("Excepcion en implementacionChat: " + e);
+            e.printStackTrace();
+        }
+
         clientes = new ArrayList<chatCliente>();
     }
 
@@ -33,5 +42,7 @@ public class implementacionChat extends UnicastRemoteObject implements chatServi
         for (chatCliente cliente : clientes) {
             cliente.recibirTiempo(tiempo, metodo);
         }
+        
+        servidorWindow.actualizarTiempo(tiempo, metodo); // Actualizar la ventana del servidor
     }
 }
