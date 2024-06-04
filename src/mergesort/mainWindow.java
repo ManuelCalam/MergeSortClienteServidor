@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -143,6 +145,13 @@ public class mainWindow extends JFrame{
                 
                 Secuencial secuential = new Secuencial();
                 
+                try {
+                    servidor.enviarCantidad(arrayLength);
+                    servidor.enviarArray(randomArray, false, "Secuencial");
+                } catch (RemoteException ex) {
+                    Logger.getLogger(mainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 for (int i = 0; i < 3; i++) {
                     startTime = System.nanoTime();
                     secuential.sort(randomArray, arrayLength);                   
@@ -168,6 +177,7 @@ public class mainWindow extends JFrame{
                 
                 try {
                     servidor.enviarTiempo(duration, "Secuencial");
+                    servidor.enviarArray(randomArray, true, "Secuencial");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -188,6 +198,14 @@ public class mainWindow extends JFrame{
                 int[] randomArray = createArray(arrayLength);
                 
                 ForkJoin ForkJoin = new ForkJoin(randomArray, 0, arrayLength);
+                
+                try {
+                    servidor.enviarCantidad(arrayLength);
+                    servidor.enviarArray(randomArray, false, "ForkJoin");
+                } catch (RemoteException ex) {
+                    Logger.getLogger(mainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 for (int i = 0; i < 3; i++) {
                     startTime = System.nanoTime();
                     ForkJoin.compute();
@@ -208,8 +226,10 @@ public class mainWindow extends JFrame{
                 
                 setArrayOnTxt(randomArray, fixedArray);
                 
+               
                 try {
                     servidor.enviarTiempo(duration, "ForkJoin");
+                    servidor.enviarArray(randomArray, true, "ForkJoin");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -231,6 +251,13 @@ public class mainWindow extends JFrame{
                 int[] randomArray = createArray(arrayLength);
                 
                 Executor Executor = new Executor();
+                
+                try {
+                    servidor.enviarCantidad(arrayLength);
+                    servidor.enviarArray(randomArray, false, "Executor");
+                } catch (RemoteException ex) {
+                    Logger.getLogger(mainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 for (int i = 0; i < 3; i++) {
                     startTime = System.nanoTime();
@@ -256,6 +283,7 @@ public class mainWindow extends JFrame{
                 
                 try {
                     servidor.enviarTiempo(duration, "Executor");
+                    servidor.enviarArray(randomArray, true, "Executor");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -280,6 +308,20 @@ public class mainWindow extends JFrame{
                     timerExecutor.setText(Double.toString(tiempo) + " ms");
                     break;
             }
+        });
+    }
+    
+        public void actualizarCantidad(int cantidad) {
+        SwingUtilities.invokeLater(() -> {
+            arrayLengthInput.setText(Integer.toString(cantidad));
+        });
+    }
+
+    public void actualizarArray(int[] array, boolean ordenado, String metodo) {
+        SwingUtilities.invokeLater(() -> {
+            JTextArea targetArea = ordenado ? fixedArray : unfixedArray;
+            targetArea.setText("");
+            setArrayOnTxt(array, targetArea);
         });
     }
     

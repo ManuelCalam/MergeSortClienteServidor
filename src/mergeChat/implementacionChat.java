@@ -12,7 +12,7 @@ public class implementacionChat extends UnicastRemoteObject implements chatServi
     public implementacionChat() throws RemoteException {
         try {
             servidorWindow = new mainWindow(this);
-            servidorWindow.drawWindow(); 
+            //servidorWindow.drawWindow(); 
         } catch (Exception e) {
             System.out.println("Excepcion en implementacionChat: " + e);
             e.printStackTrace();
@@ -45,4 +45,19 @@ public class implementacionChat extends UnicastRemoteObject implements chatServi
         
         servidorWindow.actualizarTiempo(tiempo, metodo); // Actualizar la ventana del servidor
     }
+    
+        public void enviarArray(int[] array, boolean ordenado, String metodo) throws RemoteException {
+            for (chatCliente cliente : clientes) {
+                cliente.recibirArray(array, ordenado, metodo);
+            }
+            servidorWindow.actualizarArray(array, ordenado, metodo);
+        }
+
+        @Override
+        public void enviarCantidad(int cantidad) throws RemoteException {
+            for (chatCliente cliente : clientes) {
+                cliente.recibirCantidad(cantidad);
+            }
+            servidorWindow.actualizarCantidad(cantidad);
+        }
 }

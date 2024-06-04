@@ -10,7 +10,7 @@ public class servidorRMI {
         try {
             Registry rmi = LocateRegistry.createRegistry(1099);
             
-            implementacionChat servidor = new implementacionChat(); // Crear el servidor
+            implementacionChat servidor = new implementacionChat(); 
             rmi.rebind("Chat", servidor);
             System.out.println("Servidor RMI listo");
         } catch (Exception e) {

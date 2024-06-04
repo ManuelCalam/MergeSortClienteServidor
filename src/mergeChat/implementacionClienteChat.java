@@ -23,7 +23,17 @@ public class implementacionClienteChat extends UnicastRemoteObject implements ch
     
     @Override
     public void recibirTiempo(double tiempo, String metodo) throws RemoteException {
-        window.actualizarTiempo(tiempo, metodo); // Actualizar la ventana principal con el tiempo recibido
+        window.actualizarTiempo(tiempo, metodo); 
+    }
+    
+        @Override
+    public void recibirArray(int[] array, boolean ordenado, String metodo) throws RemoteException {
+        window.actualizarArray(array, ordenado, metodo);
+    }
+
+    @Override
+    public void recibirCantidad(int cantidad) throws RemoteException {
+        window.actualizarCantidad(cantidad);
     }
     
     @Override
